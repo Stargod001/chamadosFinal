@@ -1,0 +1,201 @@
+/* Estilizacao de todos os botoes */
+.btnTelasChamado {
+    -fx-background-radius: 10px;
+    -fx-background-color: #047434;
+    -fx-text-fill: white;
+}
+
+.btnTelasChamado:hover {
+    -fx-background-color: #4D9E72;
+    -fx-text-fill: #8FB5A2;
+}
+
+.btnTelasChamado:pressed {
+    -fx-background-color: #8FB5A2;
+    -fx-text-fill: #4D9E72;
+}
+#dragArea {
+    -fx-background-color: transparent;
+}
+
+/* Sidebar kkkkkkkk */
+#sidebar {
+    -fx-background-color: #047434;
+    -fx-background-radius: 10px 0 0 10px;
+}
+
+.sidebar-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-min-width: 50px;
+    -fx-min-height: 50px;
+    -fx-background-radius: 25px;
+    -fx-cursor: hand;
+}
+
+.sidebar-btn.active {
+    -fx-background-color: white;
+    -fx-text-fill: #047434;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 6, 0.3, 0, 1);
+}
+
+.logout-btn {
+    -fx-background-color: #ff5252;
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-background-radius: 50%;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+}
+
+.logout-btn.active {
+    -fx-background-color: white;
+    -fx-text-fill: #ff5252;
+    -fx-font-size: 20px;
+    -fx-background-radius: 50%;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+}
+
+/* Tela inicial */
+
+#telaHome {
+    -fx-background-color: white;
+    -fx-background-radius: 0 10px 10px 0;
+}
+
+
+.cardsInicio {
+    -fx-background-radius: 10px;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 25, 0, 0, 0);
+}
+
+.cardClick {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+#temporarioIcon1 {
+    -fx-pref-width: 40px;
+    -fx-pref-height: 40px;
+    -fx-background-color: #F58485;
+    -fx-background-radius: 10px;
+    -fx-text-fill: white;
+}
+
+#temporarioIcon2 {
+    -fx-pref-width: 40px;
+    -fx-pref-height: 40px;
+    -fx-background-color: #8FB5A2;
+    -fx-background-radius: 10px;
+    -fx-text-fill: white;
+}
+
+#temporarioIcon3 {
+    -fx-pref-width: 40px;
+    -fx-pref-height: 40px;
+    -fx-background-color: #84AFF5;
+    -fx-background-radius: 10px;
+    -fx-text-fill: white;
+}
+
+/* Tela pra abrir Chamado */
+#telaChamados {
+    -fx-background-color: white;
+    -fx-background-radius: 0 10px 10px 0;
+}
+
+.txtNovoChamado {
+    -fx-padding: 5px;
+    -fx-border-radius: 5px;
+    -fx-backgroud-color: transparent;
+    -fx-border-color: black black black black;
+    -fx-border-width: 1px 1px 1px 1px;
+}
+
+#dataAbertura {
+    -fx-background-color: transparent;
+    -fx-border-color: black;
+    -fx-border-radius: 4;
+    -fx-padding: 6;
+    -fx-font-size: 14px;
+    -fx-text-fill: black;
+}
+
+#dataAbertura .arrow-button{
+    -fx-background-color: transparent;
+}
+
+#dataAbertura .arrow-button .arrow {
+    -fx-background-color: black;
+}
+
+#selectPrioridade {
+    -fx-background-color: transparent;
+    -fx-border-color: black;
+    -fx-border-radius: 4;
+    -fx-padding: 6;
+    -fx-font-size: 14px;
+    -fx-text-fill: black;
+}
+
+#selectPrioridade .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+    -fx-graphic-text-gap: 8px;
+}
+
+#selectPrioridade .arrow-button {
+    -fx-background-color: transparent;
+}
+
+#selectPrioridade .arrow-button .arrow {
+    -fx-background-color: black;
+}
+
+#selectPrioridade .list-view {
+    -fx-background-color: white;
+    -fx-border-width: 1.5px 1.5px 1.5px 1.5px;
+    -fx-border-color: black;
+}
+
+/* Lista de Chamados Abertos */
+#telaMeusChamados {
+    -fx-background-color: white;
+    -fx-background-radius: 0 10px 10px 0;
+}
+
+#listaChamadosAbertos {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #000000;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+#listaChamadosAbertos .list-cell {
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+    -fx-background-color: transparent;
+    -fx-text-fill: #000000;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+}
+
+#listaChamadosAbertos .list-cell:hover {
+    -fx-background-color: #8FB5A2;
+    -fx-text-fill: white;
+}
+
+#listaChamadosAbertos .list-cell:selected {
+    -fx-background-color: #4D9E72;
+    -fx-text-fill: White;
+    -fx-font-weight: bold;
+}
+    
+#telaDashboard{
+    -fx-background-color: pink;
+    -fx-background-radius: 0 10px 10px 0;
+}

@@ -1,0 +1,52 @@
+/* Fundo das telas */
+#paneInvisible {
+    -fx-background-color: transparent;
+}
+
+#dragArea {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+}
+
+/* Campos praprencher */
+#nomeField {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent black transparent;
+    -fx-border-width: 0 0 1px 0;
+}
+
+#emailField {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent black transparent;
+    -fx-border-width: 0 0 1px 0;
+}
+
+#senhaField {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent black transparent;
+    -fx-border-width: 0 0 1px 0;
+}
+
+#confirmarSenhaField{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent black transparent;
+    -fx-border-width: 0 0 1px 0;
+
+}
+
+/* Botão */
+#btnCadastro {
+    -fx-background-radius: 10px;
+    -fx-background-color: #047434;
+    -fx-text-fill: white;
+}
+
+#btnCadastro:hover {
+    -fx-background-color: #4D9E72;
+    -fx-text-fill: #8FB5A2;
+}
+
+#btnCadastro:pressed {
+    -fx-background-color: #8FB5A2;
+    -fx-text-fill: #4D9E72;
+}

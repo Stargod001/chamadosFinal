@@ -1,0 +1,34 @@
+.textFieldStyle {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent black transparent;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.textFieldStyle:disabled {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent black transparent;
+    -fx-border-width: 0 0 1px 0;
+    -fx-opacity: 1;
+    -fx-text-fill: black;
+}
+
+#dragArea {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+}
+
+#btnSenha {
+    -fx-background-radius: 10px;
+    -fx-background-color: #047434;
+    -fx-text-fill: white;
+}
+
+#btnSenha:hover {
+    -fx-background-color: #4D9E72;
+    -fx-text-fill: #8FB5A2;
+}
+
+#btnSenha:pressed {
+    -fx-background-color: #8FB5A2;
+    -fx-text-fill: #4D9E72;
+}

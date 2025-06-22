@@ -1,0 +1,40 @@
+/* Fundo invisível geral */
+.paneInvisible {
+    -fx-background-color: transparent;
+}
+
+/* Área arrastável com cantos arredondados e sombra suave */
+.dragArea {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 20, 0.3, 0, 3);
+}
+
+/* Campos de texto */
+#emailField, #senhaField {
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #cccccc;
+    -fx-background-color: #f9f9f9;
+    -fx-padding: 6 10 6 10;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+}
+
+/* Botões modernos */
+.btnLogin {
+    -fx-background-radius: 10px;
+    -fx-background-color: #047434;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.btnLogin:hover {
+    -fx-background-color: #05994c;
+}
+
+.btnLogin:pressed {
+    -fx-background-color: #035e2f;
+}

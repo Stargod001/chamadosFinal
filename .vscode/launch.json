@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Rodar com JavaFX",
+      "request": "launch",
+      "mainClass": "com.example.chamadosteste.App",
+      "vmArgs": "--module-path \"C:/Users/Frant/OneDrive/Área de Trabalho/javafx-sdk-17.0.8/lib\" --add-modules javafx.controls,javafx.fxml"
+    }
+  ]
+}

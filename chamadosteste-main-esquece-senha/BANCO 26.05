@@ -1,0 +1,149 @@
+CREATE DATABASE chamados;
+
+USE chamados;
+
+
+CREATE TABLE usuarios (
+    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    tipo ENUM('USUARIO', 'AGENTE', 'ADMIN') NOT NULL,
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE politicas_sla (
+    id_sla INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(50) NOT NULL,
+    prioridade_id INT NOT NULL,
+    tempo_resposta TIME NOT NULL,
+    tempo_resolucao TIME NOT NULL
+);
+
+
+CREATE TABLE prioridades (
+    id_prioridade INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(20) NOT NULL UNIQUE
+);
+
+
+CREATE TABLE chamados (
+    id_chamado INT PRIMARY KEY AUTO_INCREMENT,
+    id_usuario INT NOT NULL,
+    id_sla INT NOT NULL,
+    assunto VARCHAR(255) NOT NULL,
+    descricao TEXT NOT NULL,
+    status_id INT NOT NULL DEFAULT 1,
+    prioridade_id INT NOT NULL DEFAULT 2, 
+    data_abertura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    atribuido_para INT NULL,
+    data_resolucao TIMESTAMP NULL,
+    data_cancelamento TIMESTAMP NULL,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_sla) REFERENCES politicas_sla(id_sla),
+    FOREIGN KEY (atribuido_para) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (status_id) REFERENCES status_chamado(id_status),
+    FOREIGN KEY (prioridade_id) REFERENCES prioridades(id_prioridade)
+);
+
+
+CREATE TABLE status_chamado (
+    id_status INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(20) NOT NULL UNIQUE
+);
+
+CREATE TABLE historico_status (
+    id_historico INT PRIMARY KEY AUTO_INCREMENT,
+    id_chamado INT NOT NULL,
+    status_anterior_id INT NOT NULL,
+    status_novo_id INT NOT NULL, 
+    alterado_por INT NOT NULL,
+    data_alteracao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_chamado) REFERENCES chamados(id_chamado),
+    FOREIGN KEY (alterado_por) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (status_anterior_id) REFERENCES status_chamado(id_status),
+    FOREIGN KEY (status_novo_id) REFERENCES status_chamado(id_status)
+);
+
+
+INSERT INTO prioridades (nome) VALUES ('BAIXA'), ('MEDIA'), ('ALTA'), ('URGENTE');
+
+
+INSERT INTO status_chamado (nome) VALUES ('ABERTO'), ('EM_ATENDIMENTO'), ('RESOLVIDO'), ('CANCELADO');
+
+
+INSERT INTO usuarios (nome, email, senha, tipo)
+VALUES ('Frantiescoli IDEAU', 'frantiescoli@ideau.com', '123456', 'ADMIN');
+
+INSERT INTO usuarios (nome, email, senha, tipo)
+VALUES ('gianibandido', 'gianiPM', '123', 'USUARIO');
+
+INSERT INTO usuarios (nome, email, senha, tipo)
+VALUES ('Teste IDEAU', 'teste@ideau.com', '123456', 'AGENTE');
+
+INSERT INTO usuarios (nome, email, senha, tipo)
+VALUES ('1', '1', '1', 'AGENTE');
+
+
+DELETE FROM usuarios WHERE id_usuario = 4;
+
+SELECT * FROM usuarios;
+
+select * from chamados;
+
+update usuarios
+set nome = 'Jamal mamada', senha = 'jamal1' where id_usuario = 3;
+
+update usuarios
+set email = 'jamalx' where id_usuario = 3;
+
+select a.chamados, b.usuario, b. from chamados a, usuarios b
+where a.id_usuario = b.id_usuario;
+
+
+INSERT INTO politicas_sla (nome, prioridade_id, tempo_resposta, tempo_resolucao)
+VALUES ('Padrão', 2, '01:00:00', '04:00:00');
+
+INSERT INTO chamados (
+    id_usuario,
+    id_sla,
+    assunto,
+    descricao,
+    status_id,
+    prioridade_id
+) VALUES (
+    1,                -- deve existir em usuarios
+    1,                -- deve existir em politicas_sla
+    'Teste via SQL',
+    'Chamado criado direto no banco',
+    1,                -- deve existir em status_chamado (ex: ABERTO)
+    2                 -- deve existir em prioridades (ex: MEDIA)
+);
+
+select * from chamados;
+
+DELETE FROM chamados WHERE id_chamado in (6,7,8,9);
+
+select * from usuarios;
+
+UPDATE usuarios
+SET tipo = 'ADMIN'
+WHERE id_usuario = 3;
+
+
+INSERT INTO chamados (
+    id_usuario,
+    id_sla,
+    assunto,
+    descricao,
+    status_id,
+    prioridade_id
+) VALUES (
+    1,                -- deve existir em usuarios
+    1,                -- deve existir em politicas_sla
+    'JAMAL VOLTOU',
+    'jamal com clamidia',
+    2,                -- deve existir em status_chamado (ex: ABERTO)
+    3                 -- deve existir em prioridades (ex: MEDIA)
+);
