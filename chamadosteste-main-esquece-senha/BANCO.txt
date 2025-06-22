@@ -1,0 +1,173 @@
+CREATE DATABASE IF NOT EXISTS chamados;
+USE chamados;
+-- Tabela de Usuários
+CREATE TABLE IF NOT EXISTS usuarios (
+id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+nome VARCHAR(100) NOT NULL,
+email VARCHAR(150) UNIQUE NOT NULL,
+senha VARCHAR(255) NOT NULL,
+tipo ENUM("USUARIO", "AGENTE", "ADMIN") NOT NULL,
+data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+-- Tabela de Prioridades
+CREATE TABLE IF NOT EXISTS prioridades (
+id_prioridade INT PRIMARY KEY AUTO_INCREMENT,
+nome VARCHAR(20) NOT NULL UNIQUE
+);
+-- Tabela de Status de Chamado
+CREATE TABLE IF NOT EXISTS status_chamado (
+id_status INT PRIMARY KEY AUTO_INCREMENT,
+nome VARCHAR(20) NOT NULL UNIQUE
+);
+-- Tabela de Políticas de SLA
+CREATE TABLE IF NOT EXISTS politicas_sla (
+id_sla INT PRIMARY KEY AUTO_INCREMENT,
+nome VARCHAR(50) NOT NULL,
+prioridade_id INT NOT NULL,
+tempo_resposta TIME NOT NULL,
+tempo_resolucao TIME NOT NULL,
+FOREIGN KEY (prioridade_id) REFERENCES prioridades(id_prioridade)
+);
+-- Tabela de Chamados
+CREATE TABLE IF NOT EXISTS chamados (
+id_chamado INT PRIMARY KEY AUTO_INCREMENT,
+id_usuario INT NOT NULL, -- Usuário que abriu o chamado
+id_sla INT NOT NULL,
+assunto VARCHAR(255) NOT NULL,
+descricao TEXT NOT NULL,
+status_id INT NOT NULL DEFAULT 1, -- 1 = ABERTO
+prioridade_id INT NOT NULL DEFAULT 2, -- 2 = MEDIA
+data_abertura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+responsavel_id INT NULL, -- Novo campo para o responsável (agente)
+data_resolucao TIMESTAMP NULL,
+data_cancelamento TIMESTAMP NULL,
+FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+FOREIGN KEY (id_sla) REFERENCES politicas_sla(id_sla),
+FOREIGN KEY (responsavel_id) REFERENCES usuarios(id_usuario),
+FOREIGN KEY (status_id) REFERENCES status_chamado(id_status),
+FOREIGN KEY (prioridade_id) REFERENCES prioridades(id_prioridade)
+);
+-- Tabela de Histórico de Status
+CREATE TABLE IF NOT EXISTS historico_status (
+id_historico INT PRIMARY KEY AUTO_INCREMENT,
+id_chamado INT NOT NULL,
+status_anterior_id INT NOT NULL,
+status_novo_id INT NOT NULL,
+alterado_por INT NOT NULL,
+data_alteracao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (id_chamado) REFERENCES chamados(id_chamado),
+FOREIGN KEY (alterado_por) REFERENCES usuarios(id_usuario),
+FOREIGN KEY (status_anterior_id) REFERENCES status_chamado(id_status),
+FOREIGN KEY (status_novo_id) REFERENCES status_chamado(id_status)
+);
+-- Inserção de Dados Iniciais (se as tabelas estiverem vazias)
+-- Prioridades
+INSERT IGNORE INTO prioridades (id_prioridade, nome) VALUES
+(1, 'BAIXA'),
+(2, 'MEDIA'),
+(3, 'ALTA'),
+(4, 'URGENTE');
+-- Status de Chamado
+INSERT IGNORE INTO status_chamado (id_status, nome) VALUES
+(1, 'ABERTO'),
+(2, 'EM_ANDAMENTO'),
+(3, 'CONCLUIDO'),
+(4, 'CANCELADO');
+-- Usuários de Exemplo
+INSERT IGNORE INTO usuarios (id_usuario, nome, email, senha, tipo) VALUES
+(1, 'Frantiescoli IDEAU', 'frantiescoli@ideau.com', '123456', 'ADMIN'),
+(2, 'gianibandido', 'gianiPM', '123', 'USUARIO'),
+(3, 'Teste IDEAU', 'teste@ideau.com', '123456', 'AGENTE'),
+(4, 'Jamal mamada', 'jamalx', 'jamal1', 'USUARIO');
+-- Políticas de SLA
+INSERT IGNORE INTO politicas_sla (id_sla, nome, prioridade_id, tempo_resposta,
+tempo_resolucao) VALUES
+(1, 'Padrão', 2, '01:00:00', '04:00:00');
+-- Chamados de Exemplo
+INSERT IGNORE INTO chamados (id_chamado, id_usuario, id_sla, assunto,
+descricao, status_id, prioridade_id, responsavel_id) VALUES
+(1, 2, 1, 'Problema com o login', 'Não consigo acessar o sistema com minhas
+credenciais.', 1, 3, NULL), -- Chamado aberto pelo USUARIO, sem responsável
+(2, 4, 1, 'Solicitação de nova funcionalidade', 'Gostaria de uma funcionalidade
+para exportar relatórios.', 1, 2, NULL), -- Chamado aberto pelo USUARIO, sem responsável
+(3, 2, 1, 'Erro ao enviar anexo', 'O sistema apresenta erro ao tentar anexar
+arquivos grandes.', 2, 4, 3); -- Chamado aberto pelo USUARIO, atribuído ao AGENTE
+
+INSERT INTO usuarios (nome, email, senha, tipo)
+VALUES ('LuanMeuFilhoNoTruco', 'luantruco@ideau.com', 'senha123', 'AGENTE');
+
+-- Chamado 4 - Atribuído a Luan, status EM_ANDAMENTO
+INSERT INTO chamados (id_usuario, id_sla, assunto, descricao, status_id, prioridade_id, responsavel_id)
+VALUES (2, 1, 'Sistema lento', 'Sistema fica travando constantemente durante o uso.', 2, 2, 5);
+
+-- Chamado 5 - Atribuído a Luan, status CONCLUIDO
+INSERT INTO chamados (id_usuario, id_sla, assunto, descricao, status_id, prioridade_id, responsavel_id, data_resolucao)
+VALUES (4, 1, 'Erro no relatório', 'Relatório diário não está carregando.', 3, 1, 5, CURRENT_TIMESTAMP);
+
+-- Chamado 6 - Atribuído a outro agente, status CANCELADO
+INSERT INTO chamados (id_usuario, id_sla, assunto, descricao, status_id, prioridade_id, responsavel_id, data_cancelamento)
+VALUES (2, 1, 'Problema com notificações', 'Não estou recebendo notificações de chamados.', 4, 2, 3, CURRENT_TIMESTAMP);
+
+-- Chamado 7 - ABERTO, ainda sem responsável
+INSERT INTO chamados (id_usuario, id_sla, assunto, descricao, status_id, prioridade_id)
+VALUES (4, 1, 'Dúvida sobre funcionalidade', 'Como posso alterar minha senha?', 1, 1);
+
+-- Chamado 8 - Atribuído a Luan, URGENTE e em andamento
+INSERT INTO chamados (id_usuario, id_sla, assunto, descricao, status_id, prioridade_id, responsavel_id)
+VALUES (2, 1, 'Sistema caiu!', 'Todos os sistemas estão fora do ar!', 2, 4, 5);
+
+-- Chamado 9 - Atribuído a Luan, ALTA prioridade e ABERTO
+INSERT INTO chamados (id_usuario, id_sla, assunto, descricao, status_id, prioridade_id, responsavel_id)
+VALUES (4, 1, 'Erro de acesso restrito', 'Usuário comum acessando áreas de administrador.', 1, 3, 5);
+
+SELECT * FROM usuarios WHERE nome = 'LuanMeuFilhoNoTruco';
+
+SELECT * FROM chamados WHERE responsavel_id = 5;
+
+-- Chamado 10 - ABERTO, prioridade URGENTE
+INSERT INTO chamados (id_usuario, id_sla, assunto, descricao, status_id, prioridade_id, responsavel_id)
+VALUES (2, 1, 'Erro crítico no banco de dados', 'Banco de dados parou de responder subitamente.', 1, 4, 5);
+
+-- Chamado 11 - EM_ANDAMENTO, prioridade MEDIA
+INSERT INTO chamados (id_usuario, id_sla, assunto, descricao, status_id, prioridade_id, responsavel_id)
+VALUES (4, 1, 'Solicitação de acesso', 'Solicito acesso ao módulo financeiro.', 2, 2, 5);
+
+-- Chamado 12 - CONCLUIDO, prioridade ALTA
+INSERT INTO chamados (id_usuario, id_sla, assunto, descricao, status_id, prioridade_id, responsavel_id, data_resolucao)
+VALUES (2, 1, 'Falha ao imprimir', 'Impressora imprime páginas em branco.', 3, 3, 5, CURRENT_TIMESTAMP);
+
+-- Chamado 13 - CANCELADO, prioridade BAIXA
+INSERT INTO chamados (id_usuario, id_sla, assunto, descricao, status_id, prioridade_id, responsavel_id, data_cancelamento)
+VALUES (4, 1, 'Chamado aberto por engano', 'Usuário informou que não precisava mais.', 4, 1, 5, CURRENT_TIMESTAMP);
+
+-- Chamado 14 - EM_ANDAMENTO, prioridade URGENTE
+INSERT INTO chamados (id_usuario, id_sla, assunto, descricao, status_id, prioridade_id, responsavel_id)
+VALUES (2, 1, 'Sistema de vendas fora do ar', 'Sistema de vendas indisponível em horário de pico.', 2, 4, 5);
+
+
+-- Chamado 15 - ABERTO, prioridade BAIXA
+INSERT INTO chamados (id_usuario, id_sla, assunto, descricao, status_id, prioridade_id)
+VALUES (2, 1, 'Dúvida sobre relatórios', 'Como agendar a geração automática de relatórios?', 1, 1);
+
+-- Chamado 16 - ABERTO, prioridade URGENTE
+INSERT INTO chamados (id_usuario, id_sla, assunto, descricao, status_id, prioridade_id)
+VALUES (4, 1, 'Falha em autenticação de dois fatores', 'Não consigo autenticar usando o código recebido.', 1, 4);
+
+-- Chamado 17 - CANCELADO, prioridade MÉDIA
+INSERT INTO chamados (id_usuario, id_sla, assunto, descricao, status_id, prioridade_id, data_cancelamento)
+VALUES (2, 1, 'Chamado duplicado', 'Usuário relatou que abriu dois chamados iguais.', 4, 2, CURRENT_TIMESTAMP);
+
+-- Chamado 18 - EM_ANDAMENTO, prioridade ALTA
+INSERT INTO chamados (id_usuario, id_sla, assunto, descricao, status_id, prioridade_id)
+VALUES (4, 1, 'Erro ao salvar dados', 'Os dados não estão sendo salvos corretamente no sistema.', 2, 3);
+
+-- Chamado 19 - CONCLUIDO, prioridade BAIXA
+INSERT INTO chamados (id_usuario, id_sla, assunto, descricao, status_id, prioridade_id, data_resolucao)
+VALUES (2, 1, 'Atualização de dados concluída', 'Os dados foram atualizados com sucesso após erro anterior.', 3, 1, CURRENT_TIMESTAMP);
+
+
+
+
+select * from chamados;
+
+select * from usuarios;
